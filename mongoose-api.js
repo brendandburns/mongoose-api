@@ -37,7 +37,17 @@ app.get('/' + resourceName + '/:rsrcId', function(req, res) {
     })
 });
 
-app.post('/' + resourceName + '/:rsrcId', function(req, res) {
+app.post('/' + resourceName,  function(req, res) {
+    var obj = new Obj(req.body);
+    obj.save(function(err) {
+        if (err) {
+            console.log('ERROR: ' + err);
+        }
+        res.json(res.body);
+    })
+});
+
+app.put('/' + resourceName + '/:rsrcId', function(req, res) {
     var obj = new Obj(req.body);
     obj.save(function(err) {
         if (err) {
