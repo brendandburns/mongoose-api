@@ -38,24 +38,31 @@ app.get('/' + resourceName + '/:rsrcId', function(req, res) {
 });
 
 app.post('/' + resourceName,  function(req, res) {
-    var obj = new Obj(req.body);
-    obj.save(function(err) {
-        if (err) {
-            console.log('ERROR: ' + err);
-        }
-        res.json(res.body);
-    })
+    create(req.body);
 });
 
 app.put('/' + resourceName + '/:rsrcId', function(req, res) {
-    var obj = new Obj(req.body);
+    update(req.body);
+});
+
+var create = function(body) {
+    var obj = new Obj(body);
     obj.save(function(err) {
         if (err) {
             console.log('ERROR: ' + err);
         }
-        res.json(res.body);
+        res.json(body);
     })
-});
+};
+
+var update = function(rsrcId, body) {
+    Obj.update({ name: new RegExp(rsrcId, 'i') }, body, {upsert: true}, function(err) {
+        if (err) {
+            console.log('ERROR: ' + err);
+        }
+        res.json(body);
+    })
+};
 
 app.delete('/' + resourceName, function(req, res) {
     Obj.remove().exec();
