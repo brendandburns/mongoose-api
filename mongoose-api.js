@@ -38,14 +38,14 @@ app.get('/' + resourceName + '/:rsrcId', function(req, res) {
 });
 
 app.post('/' + resourceName,  function(req, res) {
-    create(req.body);
+    create(req.body, res);
 });
 
 app.put('/' + resourceName + '/:rsrcId', function(req, res) {
-    update(req.body);
+    update(req.params.rsrcId, req.body, res);
 });
 
-var create = function(body) {
+var create = function(body, res) {
     var obj = new Obj(body);
     obj.save(function(err) {
         if (err) {
@@ -55,7 +55,7 @@ var create = function(body) {
     })
 };
 
-var update = function(rsrcId, body) {
+var update = function(rsrcId, body, res) {
     Obj.update({ name: new RegExp(rsrcId, 'i') }, body, {upsert: true}, function(err) {
         if (err) {
             console.log('ERROR: ' + err);
